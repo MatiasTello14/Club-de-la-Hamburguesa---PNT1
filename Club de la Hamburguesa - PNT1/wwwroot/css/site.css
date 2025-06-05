@@ -1,4 +1,131 @@
-html {
+
+
+body {
+    background-image: url('/imagenes/fondo-index-principal.jpg'); /* ASEGÚRATE QUE LA RUTA A TU IMAGEN ES CORRECTA */
+    background-size:cover; /* Cubre todo el área sin dejar espacios */
+    background-position:center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
+    background-color: #333; /* Color de fallback si la imagen no carga */
+    color: #fff; /* Color de texto por defecto para contrastar */
+    font-family: 'Arial', sans-serif; /* Fuente más legible */
+}
+
+/* Estilos para mejorar la legibilidad del contenido sobre la imagen de fondo */
+.text-center, .hs, .container { /* El contenedor principal también puede necesitar transparencia */
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente para el contenido */
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Ajusta estos selectores si tus clases son diferentes o si quieres aplicar a más elementos */
+/* Por ejemplo, si tienes tarjetas de productos o secciones específicas */
+.burger-card, .beverage-card, .ingredient-group, .price-display, .order-summary {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente para los elementos internos */
+}
+
+/* Estilos generales para el texto y títulos (pueden ir aquí o en otros archivos css) */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffc107; /* Amarillo brillante para los títulos */
+    font-weight: bold;
+}
+
+p {
+    color: #f8f9fa; /* Color de texto más claro */
+    font-size: 1.1em;
+}
+
+a {
+    color: #007bff; /* Color de enlace por defecto */
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+.horarios {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #28a745; /* Verde para el horario */
+}
+
+.social-media-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .social-media-icons a {
+        font-size: 3em;
+        color: #fff;
+        margin: 0 15px;
+        transition: color 0.3s ease;
+    }
+
+        .social-media-icons a:hover {
+            color: #ffc107;
+        }
+
+    .social-media-icons .fab.fa-facebook {
+        color: #3b5998;
+    }
+
+    .social-media-icons .fab.fa-whatsapp {
+        color: #25d366;
+    }
+
+    .social-media-icons .fab.fa-instagram {
+        color: #E1306C;
+    }
+
+.navbar {
+    background-color: #343a40 !important; /* Un gris oscuro, casi negro */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Opcional: una sombra para darle profundidad */
+}
+
+/* Color de las letras de las opciones del menú: Blanco */
+/* Selectores comunes: .navbar-nav .nav-link (para los enlaces de texto) */
+/* .navbar-brand (para el título/logo de la marca)    */
+.navbar-nav .nav-link,
+.navbar-brand {
+    color: #f8f9fa !important; /* Blanco muy claro */
+    font-weight: bold; /* Opcional: negrita para las letras */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7), /* Sombra oscura para el relieve */
+    -1px -1px 1px rgba(255, 255, 255, 0.2); /* Sombra clara para el relieve */
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Transición suave al pasar el mouse */
+}
+
+    /* Estilo al pasar el mouse (hover) por las opciones del menú */
+    .navbar-nav .nav-link:hover,
+    .navbar-brand:hover {
+        color: #e9ecef !important; /* Un blanco ligeramente diferente al pasar el mouse */
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), /* Un "brillo" suave */
+        0 0 10px rgba(255, 255, 255, 0.3); /* Otro brillo */
+    }
+
+    /* Color de la letra de la opción activa (si Bootstrap lo usa) */
+    .navbar-nav .nav-link.active {
+        color: #ffc107 !important; /* Amarillo para la opción activa */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7), -1px -1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+/* Color del ícono del "toggler" (el botón de hamburguesa en móviles) */
+.navbar-light .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+/* Color del borde del toggler */
+.navbar-light .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+
+
+/*/html {
   font-size: 14px;
 }
 
@@ -19,4 +146,4 @@ html {
 
 body {
   margin-bottom: 60px;
-}
+}*/
