@@ -2,7 +2,7 @@
 {
     public class Item
     {
-        public int cantidad { get; set; }
-        public Hamburguesa hamburguesaCombo { get; set; }
+        public int Cantidad { get; set; }
+        public Hamburguesa HamburguesaCombo { get; set; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public class Ticket
     {
-        public Pedido pedido { get; set; }
+        public Pedido Pedido { get; set; }
     }
 }
