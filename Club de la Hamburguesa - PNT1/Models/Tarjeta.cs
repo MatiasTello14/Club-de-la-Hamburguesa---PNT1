@@ -2,10 +2,11 @@
 {
     public class Tarjeta
     {
-        public int numero { get; set; }
-        public string titular { get; set; }
-        public int anioVencimiento { get; set; }
-        public int codigoSeguridad { get; set; }
+        public int Id { get; set; }
+        public int Numero { get; set; }
+        public string Titular { get; set; }
+        public int AnioVencimiento { get; set; }
+        public int CodigoSeguridad { get; set; }
 
     }
 }

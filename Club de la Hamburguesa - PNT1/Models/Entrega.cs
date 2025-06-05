@@ -2,6 +2,6 @@
 {
     public enum Entrega
     {
-        EnvioDomicilio, retiroLocal
+        EnvioDomicilio, RetiroLocal
     }
 }
