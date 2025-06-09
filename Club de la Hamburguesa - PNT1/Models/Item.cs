@@ -2,7 +2,14 @@
 {
     public class Item
     {
+        public int Id { get; set; }
         public int Cantidad { get; set; }
+
+        public int HamburguesaId { get; set; }
         public Hamburguesa HamburguesaCombo { get; set; }
+
+        public int PedidoId { get; set; }
+        public Pedido Pedido { get; set; }
+
     }
 }

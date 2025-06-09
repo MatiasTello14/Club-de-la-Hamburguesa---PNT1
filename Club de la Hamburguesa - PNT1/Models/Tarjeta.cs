@@ -7,6 +7,8 @@
         public string Titular { get; set; }
         public int AnioVencimiento { get; set; }
         public int CodigoSeguridad { get; set; }
+        public int UsuarioId { get; set; }
+        public Usuario Usuario { get; set; }
 
     }
 }
