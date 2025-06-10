@@ -1,17 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Club_de_la_Hamburguesa___PNT1.Models
 {
     public class Hamburguesa
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Nombre { get; set; }
-
         public string Descripcion { get; set; }
         public double Precio { get; set; }
-        public List<Ingrediente> Ingredientes { get; set; }
+        public int Stock { get; set; }
 
-        [EnumDataType(typeof(Bebida))]
-        public Bebida BebidaCombo { get; set; }
+
+        public Hamburguesa() { }
+
+        public Hamburguesa(string nombre, string descripcion, double precio, int stock)
+        {
+            Nombre = nombre;
+            Descripcion = descripcion;
+            Precio = precio;
+            Stock = stock;
+        }
+
+
+
     }
+
+
 }

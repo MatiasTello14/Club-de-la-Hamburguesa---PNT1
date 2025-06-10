@@ -2,6 +2,7 @@
 {
     public enum Entrega
     {
-        EnvioDomicilio, RetiroLocal
+        EnvioDomicilio = 100,
+        RetiroLocal = 0
     }
 }

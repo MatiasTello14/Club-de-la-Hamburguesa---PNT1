@@ -2,6 +2,10 @@
 {
     public enum Bebida
     {
-        Cocacola, Sprite, Agua, Fanta, Ninguna
+        CocaCola = 500, 
+        Sprite = 400, 
+        Agua = 300, 
+        Fanta = 400, 
+        Ninguna = 0
     }
 }

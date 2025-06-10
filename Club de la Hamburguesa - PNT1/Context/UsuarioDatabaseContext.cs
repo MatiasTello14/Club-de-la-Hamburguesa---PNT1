@@ -15,6 +15,6 @@ namespace Club_de_la_Hamburguesa___PNT1.Context
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Hamburguesa> Hamburguesas { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
+
     }
 }

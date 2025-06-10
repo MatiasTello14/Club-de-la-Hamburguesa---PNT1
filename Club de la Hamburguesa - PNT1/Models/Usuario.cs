@@ -18,8 +18,19 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
 
         [Display(Name = "Descuento de bienvenida aplicado")]
         public bool DescuentoBienvenidaAplicado { get; set; }
-
         public ICollection<Pedido> Pedidos { get; set; }
+
+
+
+        public Usuario() { }
+
+        public Usuario(string nombre, string email, string contraseña)
+        {
+            Nombre = nombre;
+            Email = email;
+            Contraseña = contraseña;
+            DescuentoBienvenidaAplicado = false;
+        }
     }
 }
 

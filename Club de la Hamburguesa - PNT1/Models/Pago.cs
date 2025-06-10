@@ -2,6 +2,7 @@
 {
     public enum Pago
     {
-        Efectivo, Tarjeta
+        Efectivo,
+        Tarjeta
     }
 }

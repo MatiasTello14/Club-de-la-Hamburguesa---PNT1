@@ -4,8 +4,15 @@
     {
 
         public int Id { get; set; }
-
         public int PedidoId { get; set; }
         public Pedido Pedido { get; set; }
+
+
+        public Ticket() { 
+        }
+        public void Imprimir()
+        {
+
+        }
     }
 }

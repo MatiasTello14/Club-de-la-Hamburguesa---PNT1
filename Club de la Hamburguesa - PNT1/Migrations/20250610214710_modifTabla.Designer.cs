@@ -4,6 +4,7 @@ using Club_de_la_Hamburguesa___PNT1.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_de_la_Hamburguesa___PNT1.Migrations
 {
     [DbContext(typeof(UsuarioDatabaseContext))]
-    partial class UsuarioDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250610214710_modifTabla")]
+    partial class modifTabla
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

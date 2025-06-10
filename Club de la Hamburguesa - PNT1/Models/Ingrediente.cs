@@ -2,6 +2,11 @@
 {
     public enum Ingrediente
     {
-        Lechuga, Tomate, Queso, Huevo, Bacon
+        Lechuga = 200, 
+        Tomate = 200 ,
+        Queso = 300, 
+        Huevo = 400, 
+        Bacon = 400,
+        Ninguno = 0
     }
 }
