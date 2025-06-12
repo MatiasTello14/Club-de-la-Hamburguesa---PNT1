@@ -22,7 +22,9 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
 
 
 
-        public Usuario() { }
+        public Usuario() {
+            Pedidos = new List<Pedido>();
+        }
 
         public Usuario(string nombre, string email, string contraseña)
         {
@@ -30,6 +32,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             Email = email;
             Contraseña = contraseña;
             DescuentoBienvenidaAplicado = false;
+            Pedidos = new List<Pedido>();
         }
     }
 }

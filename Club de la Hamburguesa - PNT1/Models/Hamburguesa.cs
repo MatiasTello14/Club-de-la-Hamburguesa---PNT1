@@ -8,6 +8,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public string ImagenUrl { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public double Precio { get; set; }

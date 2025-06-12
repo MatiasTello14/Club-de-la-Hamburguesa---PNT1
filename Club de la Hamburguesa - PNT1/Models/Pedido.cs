@@ -20,7 +20,9 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
 
 
 
-        public Pedido() { }
+        public Pedido() {
+            Items = new List<Item>();
+        }
 
         public Pedido(Entrega metodoEntrega, Pago metodoPago, string direccion, int usuarioId)
         {
@@ -29,6 +31,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             Direccion = direccion;
             UsuarioId = usuarioId;
             Estado = Estado.EnPreparacion;
+            Items = new List<Item>();
         }
     }
 }
