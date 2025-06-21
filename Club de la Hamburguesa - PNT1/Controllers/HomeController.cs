@@ -15,6 +15,11 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetInt32("UsuarioId") == null)
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+
             return View();
         }
 

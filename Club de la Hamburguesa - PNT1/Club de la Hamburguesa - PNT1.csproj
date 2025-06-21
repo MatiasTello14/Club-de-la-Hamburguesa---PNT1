@@ -8,7 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\PedidoCreateViewModel.cs" />
     <Compile Remove="Views\Home\Usuario.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Home\Privacy.cshtml" />
+    <Content Remove="Views\Home\Usuario.cshtml" />
+    <Content Remove="wwwroot\imagenes\logo.avif" />
+    <Content Remove="wwwroot\imagenes\logo.jpg" />
   </ItemGroup>
 
   <ItemGroup>

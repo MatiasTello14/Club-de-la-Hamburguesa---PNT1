@@ -17,12 +17,13 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
 
         public Hamburguesa() { }
 
-        public Hamburguesa(string nombre, string descripcion, double precio, int stock)
+        public Hamburguesa(string nombre, string descripcion, double precio, int stock, string imagenUrl)
         {
             Nombre = nombre;
             Descripcion = descripcion;
             Precio = precio;
             Stock = stock;
+            ImagenUrl = imagenUrl; 
         }
 
 

@@ -1,0 +1,29 @@
+﻿@model List<Club_de_la_Hamburguesa___PNT1.Models.Pedido>
+
+<h2 class="titulo">Mi historial de pedidos</h2>
+
+<table class="table table-striped historial-tables">
+    <thead>
+        <tr>
+            <th># Pedido</th>
+            <th>Fecha</th>
+            <th>Método de Entrega</th>
+            <th>Método de Pago</th>
+            <th>Estado</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pedido in Model)
+        {
+            <tr>
+                <td>@pedido.Id</td>
+                <td>@pedido.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@pedido.MetodoEntrega</td>
+                <td>@pedido.MetodoPago</td>
+                <td>@pedido.Estado</td>
+                <td>$@pedido.ObtenerMontoTotal()</td>
+            </tr>
+        }
+    </tbody>
+</table>

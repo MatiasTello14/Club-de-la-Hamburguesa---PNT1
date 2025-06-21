@@ -4,6 +4,7 @@ using Club_de_la_Hamburguesa___PNT1.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_de_la_Hamburguesa___PNT1.Migrations
 {
     [DbContext(typeof(UsuarioDatabaseContext))]
-    partial class UsuarioDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250621054110_modificacionValoresHamburg")]
+    partial class modificacionValoresHamburg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,10 +64,16 @@ namespace Club_de_la_Hamburguesa___PNT1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BebidaElegida")
+                        .HasColumnType("int");
+
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
                     b.Property<int>("HamburguesaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredienteAdicional")
                         .HasColumnType("int");
 
                     b.Property<int>("PedidoId")
@@ -87,10 +96,8 @@ namespace Club_de_la_Hamburguesa___PNT1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BebidaElegida")
-                        .HasColumnType("int");
-
                     b.Property<string>("Direccion")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Estado")
@@ -98,9 +105,6 @@ namespace Club_de_la_Hamburguesa___PNT1.Migrations
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("IngredienteAdicional")
-                        .HasColumnType("int");
 
                     b.Property<int>("MetodoEntrega")
                         .HasColumnType("int");
@@ -184,7 +188,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Migrations
 
             modelBuilder.Entity("Club_de_la_Hamburguesa___PNT1.Models.Item", b =>
                 {
-                    b.HasOne("Club_de_la_Hamburguesa___PNT1.Models.Hamburguesa", "Hamburguesa")
+                    b.HasOne("Club_de_la_Hamburguesa___PNT1.Models.Hamburguesa", "HamburguesaCombo")
                         .WithMany()
                         .HasForeignKey("HamburguesaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -196,7 +200,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Hamburguesa");
+                    b.Navigation("HamburguesaCombo");
 
                     b.Navigation("Pedido");
                 });

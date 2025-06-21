@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Club_de_la_Hamburguesa___PNT1.Context;
 using Club_de_la_Hamburguesa___PNT1.Models;
+using Club_de_la_Hamburguesa___PNT1.Migrations;
 
 namespace Club_de_la_Hamburguesa___PNT1.Controllers
 {
@@ -19,15 +20,81 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
             _context = context;
         }
 
+        // GET: Usuario/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Usuario/Login
+        [HttpPost]
+        public IActionResult Login(string email, string contraseña)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var usuarios = _context.Usuarios.ToList();
+                Usuario usuarioExistente = null;
+                int i = 0;
+                bool encontrado = false;
+
+                while (i < usuarios.Count && !encontrado)
+                {
+                    var u = usuarios[i];
+                    if (u.Email.ToLower() == email.ToLower() && u.Contraseña == contraseña)
+                    {
+                        usuarioExistente = u;
+                        encontrado = true;
+                    }
+                    i++;
+                }
+                if (usuarioExistente == null)
+                {
+                    ModelState.AddModelError("", "No existe un usuario con ese correo.");
+                    return View();
+                }
+
+                if (usuarioExistente.Contraseña != contraseña)
+                {
+                    ModelState.AddModelError("", "Contraseña incorrecta.");
+                    return View();
+                }
+
+                HttpContext.Session.SetInt32("UsuarioId", usuarioExistente.Id);
+                HttpContext.Session.SetString("NombreUsuario", usuarioExistente.Nombre);
+                HttpContext.Session.SetString("EsAdmin", usuarioExistente.EsAdmin.ToString().ToLower());
+
+                return RedirectToAction("Index", "Home", new { usuarioId = usuarioExistente.Id });
+            }
+
+            return View();
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();  // Borra toda la sesión
+            return RedirectToAction("Login", "Usuario"); // Vuelve al Home o Login
+        }
+
         // GET: Usuario
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Usuarios.ToListAsync());
+            IActionResult resultado = View(_context.Usuarios.ToList());
+            if (HttpContext.Session.GetString("EsAdmin") != "true")
+            {
+                resultado = RedirectToAction("Login");
+            }
+
+            return resultado;
         }
 
         // GET: Usuario/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (HttpContext.Session.GetString("EsAdmin") != "true")
+            {
+                return RedirectToAction("Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -54,20 +121,92 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Email,Contraseña,DescuentoBienvenidaAplicado")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Email,Contraseña,DescuentoBienvenidaAplicado")]
+                Usuario usuario,
+                string? Tarjeta_Numero,
+                string? Tarjeta_Titular,
+                int? Tarjeta_AnioVencimiento,
+                int? Tarjeta_CodigoSeguridad)
         {
+            // Validar email único con while
+            var usuarios = _context.Usuarios.ToList();
+            int i = 0;
+            bool emailExiste = false;
+
+            while (i < usuarios.Count && !emailExiste)
+            {
+                if (usuarios[i].Email.ToLower() == usuario.Email.ToLower())
+                {
+                    emailExiste = true;
+                }
+                i++;
+            }
+
+            if (emailExiste)
+            {
+                ModelState.AddModelError("Email", "El email ya está registrado.");
+                return View(usuario);
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    //  Validar usando tus setters para Nombre, Email y Contraseña
+                    usuario.setNombre(usuario.Nombre);
+                    usuario.setEmail(usuario.Email);
+                    usuario.setContraseña(usuario.Contraseña);
+
+                    // Validar y crear la Tarjeta solo si tiene datos
+                    bool tarjetaCompleta =
+                        !string.IsNullOrWhiteSpace(Tarjeta_Numero) ||
+                        !string.IsNullOrWhiteSpace(Tarjeta_Titular) ||
+                        Tarjeta_AnioVencimiento.HasValue ||
+                        Tarjeta_CodigoSeguridad.HasValue;
+
+                    if (tarjetaCompleta)
+                    {
+                        if (string.IsNullOrWhiteSpace(Tarjeta_Numero) ||
+                            string.IsNullOrWhiteSpace(Tarjeta_Titular) ||
+                            !Tarjeta_AnioVencimiento.HasValue ||
+                            !Tarjeta_CodigoSeguridad.HasValue)
+                        {
+                            ModelState.AddModelError("Tarjeta", "Completá todos los campos de la tarjeta o dejalos todos vacíos.");
+                            return View(usuario);
+                        }
+
+                        var tarjeta = new Tarjeta();
+                        tarjeta.setNumero(Tarjeta_Numero);
+                        tarjeta.setTitular(Tarjeta_Titular);
+                        tarjeta.setAnioVencimiento(Tarjeta_AnioVencimiento.Value);
+                        tarjeta.setCodigoSeguridad(Tarjeta_CodigoSeguridad.Value);
+
+                        usuario.Tarjeta = tarjeta;
+                    }
+
+                    // Guardar en base
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Login", "Usuario");
+                }
+                catch (Exception ex)
+                {
+                    // Capturar cualquier error de validación de tus métodos y mostrarlo
+                    ModelState.AddModelError("", ex.Message);
+                    return View(usuario);
+                }
             }
+
             return View(usuario);
         }
 
         // GET: Usuario/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpContext.Session.GetString("EsAdmin") != "true")
+            {
+                return RedirectToAction("Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -88,6 +227,10 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Email,Contraseña,DescuentoBienvenidaAplicado")] Usuario usuario)
         {
+            if (HttpContext.Session.GetString("EsAdmin") != "true")
+            {
+                return RedirectToAction("Login");
+            }
             if (id != usuario.Id)
             {
                 return NotFound();
@@ -119,6 +262,10 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // GET: Usuario/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpContext.Session.GetString("EsAdmin") != "true")
+            {
+                return RedirectToAction("Login");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -139,6 +286,10 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (HttpContext.Session.GetString("EsAdmin") != "true")
+            {
+                return RedirectToAction("Login");
+            }
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario != null)
             {

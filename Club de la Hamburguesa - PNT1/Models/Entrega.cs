@@ -1,8 +1,12 @@
-﻿namespace Club_de_la_Hamburguesa___PNT1.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Club_de_la_Hamburguesa___PNT1.Models
 {
     public enum Entrega
     {
-        EnvioDomicilio = 100,
-        RetiroLocal = 0
+        [Display(Name = "Retiro en local")]
+        RetiroLocal = 0,
+        [Display(Name = "Envío a domicilio")]
+        EnvioDomicilio = 1
     }
 }

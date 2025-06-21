@@ -123,7 +123,116 @@ a {
     border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+.container{
+    margin-top:150px;
+}
 
+.row {
+    margin: 30px;
+}
+
+.historial-tables {
+    background-color: white;
+    color: black;
+}
+
+.subtHome {
+    text-align: center;
+}
+
+.titulo {
+    text-align: center;
+    text-transform: uppercase;
+    margin: 25px
+}
+.subtitulo {
+
+    text-align: center;
+    font-family: fantasy;
+    text-transform: uppercase;
+}
+
+.descp {
+    color: black;
+    text-align: center;
+}
+
+.confir {
+    text-align: center;
+}
+
+.boton {
+    margin-top: 25px;
+}
+
+.contenedor-bienvenida{
+    margin-top: 300px;
+}
+
+.redes-wrapper {
+    text-align: center; 
+}
+
+.redes { 
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.bi {
+    font-size: 30px;
+    letter-spacing: 50px;
+}
+
+.bi-whatsapp:hover {
+    color: green;
+}
+
+.bi-instagram:hover {
+    color: orange;
+}
+
+.bi-facebook:hover {
+    color: blue;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.nav-item {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-shadow: 2px 2px 5px gray;
+    font-size: 15px;
+}
+
+
+.horarios {
+    text-align: center;
+}
+
+    .horarios p {
+        color: white;
+        padding: 20px;
+        font-size: 25px;
+        padding-bottom: 5px;
+        padding-top: 5px;
+        font-weight: bold;
+        font-family: cursive;
+        border-radius: 10px;
+    }
+
+#direccionContainer {
+    style ="display:none";
+}
+
+#tarjetaForm {
+    style ="display:none";
+}
 
 /*/html {
   font-size: 14px;
@@ -147,3 +256,4 @@ html {
 body {
   margin-bottom: 60px;
 }*/
+

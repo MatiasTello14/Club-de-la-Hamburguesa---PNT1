@@ -10,13 +10,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
         public int Id { get; set; }
         public int Cantidad { get; set; }
         public int HamburguesaId { get; set; }
-        public Hamburguesa HamburguesaCombo { get; set; }
-
-        [EnumDataType(typeof(Bebida))]
-        public Bebida BebidaElegida { get; set; }
-
-        [EnumDataType(typeof(Ingrediente))]
-        public Ingrediente IngredienteAdicional { get; set; }
+        public Hamburguesa Hamburguesa { get; set; }
         public int PedidoId { get; set; }
         public Pedido Pedido { get; set; }
 
@@ -24,12 +18,11 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
 
         public Item() { }
 
-        public Item(int cantidad, int hamburguesaId, Bebida bebida, Ingrediente ingrediente)
+        public Item(int cantidad, int hamburguesaId)
         {
             Cantidad = cantidad;
             HamburguesaId = hamburguesaId;
-            BebidaElegida = bebida;
-            IngredienteAdicional = ingrediente;
+
         }
 
         public double CalcularPrecioTotalItem(Item item)

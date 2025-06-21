@@ -4,6 +4,7 @@ using Club_de_la_Hamburguesa___PNT1.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Club_de_la_Hamburguesa___PNT1.Migrations
 {
     [DbContext(typeof(UsuarioDatabaseContext))]
-    partial class UsuarioDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250621085333_CambiosAtributosEnPedidoEItem")]
+    partial class CambiosAtributosEnPedidoEItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,7 +187,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Migrations
 
             modelBuilder.Entity("Club_de_la_Hamburguesa___PNT1.Models.Item", b =>
                 {
-                    b.HasOne("Club_de_la_Hamburguesa___PNT1.Models.Hamburguesa", "Hamburguesa")
+                    b.HasOne("Club_de_la_Hamburguesa___PNT1.Models.Hamburguesa", "HamburguesaCombo")
                         .WithMany()
                         .HasForeignKey("HamburguesaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -196,7 +199,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Hamburguesa");
+                    b.Navigation("HamburguesaCombo");
 
                     b.Navigation("Pedido");
                 });

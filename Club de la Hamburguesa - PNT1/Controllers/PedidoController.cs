@@ -48,25 +48,130 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // GET: Pedido/Create
         public IActionResult Create()
         {
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id");
-            return View();
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.Include(u => u.Tarjeta).FirstOrDefault(u => u.Id == usuarioId);
+
+            ViewBag.Hamburguesas = _context.Hamburguesas.ToList();
+            ViewBag.UsuarioTieneTarjeta = usuario?.Tarjeta != null;
+            ViewBag.Bebidas = Enum.GetValues(typeof(Bebida));
+            ViewBag.Ingredientes = Enum.GetValues(typeof(Ingrediente));
+
+            return View(new Pedido());  // Usás Pedido directamente
         }
 
         // POST: Pedido/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MetodoEntrega,MetodoPago,Direccion,Estado,UsuarioId,Fecha")] Pedido pedido)
+        public async Task<IActionResult> Create(Pedido pedido, List<int> HamburguesasSeleccionadas)
         {
-            if (ModelState.IsValid)
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.Include(u => u.Tarjeta).FirstOrDefault(u => u.Id == usuarioId);
+            bool usuarioTieneTarjeta = usuario?.Tarjeta != null;
+
+            // Validar domicilio
+            if (pedido.MetodoEntrega == Entrega.EnvioDomicilio && string.IsNullOrWhiteSpace(pedido.Direccion))
             {
-                _context.Add(pedido);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("Direccion", "Debe ingresar una dirección si elige Envío a domicilio.");
             }
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", pedido.UsuarioId);
+
+            // Validar hamburguesas
+            if (HamburguesasSeleccionadas == null || !HamburguesasSeleccionadas.Any())
+            {
+                ModelState.AddModelError("", "Debe elegir al menos una hamburguesa.");
+            }
+
+            // Validar tarjeta si eligió pagar con tarjeta pero no tiene
+            if (pedido.MetodoPago == Pago.Tarjeta && !usuarioTieneTarjeta)
+            {
+                // Podés recibir campos con [FromForm] si querés
+                string numero = Request.Form["Tarjeta_Numero"];
+                string titular = Request.Form["Tarjeta_Titular"];
+                int? anio = int.TryParse(Request.Form["Tarjeta_AnioVencimiento"], out int a) ? a : (int?)null;
+                int? codigo = int.TryParse(Request.Form["Tarjeta_CodigoSeguridad"], out int c) ? c : (int?)null;
+
+                if (string.IsNullOrWhiteSpace(numero) || string.IsNullOrWhiteSpace(titular) || !anio.HasValue || !codigo.HasValue)
+                {
+                    ModelState.AddModelError("Tarjeta", "Completá todos los campos de la tarjeta.");
+                }
+                else
+                {
+                    var tarjeta = new Tarjeta();
+                    tarjeta.setNumero(numero);
+                    tarjeta.setTitular(titular);
+                    tarjeta.setAnioVencimiento(anio.Value);
+                    tarjeta.setCodigoSeguridad(codigo.Value);
+                    usuario.Tarjeta = tarjeta;
+                }
+            }
+
+            // Validaciones fallidas → recargar combos
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Hamburguesas = _context.Hamburguesas.ToList();
+                ViewBag.UsuarioTieneTarjeta = usuarioTieneTarjeta;
+                ViewBag.Bebidas = Enum.GetValues(typeof(Bebida));
+                ViewBag.Ingredientes = Enum.GetValues(typeof(Ingrediente));
+                return View(pedido);
+            }
+
+            // Armar pedido final
+            pedido.UsuarioId = usuarioId.Value;
+            pedido.Estado = Estado.EnPreparacion;
+            pedido.Fecha = DateTime.Now;
+            pedido.Items = new List<Item>();
+
+            foreach (var id in HamburguesasSeleccionadas)
+            {
+                var hamburguesa = _context.Hamburguesas.Find(id); // TRAE la hamburguesa
+                pedido.Items.Add(new Item
+                {
+                    HamburguesaId = id,
+                    Hamburguesa = hamburguesa, // ASIGNÁS la instancia real
+                    Cantidad = 1
+                });
+            }
+
+            _context.Pedidos.Add(pedido);
+            await _context.SaveChangesAsync();
+            double montoTotal = pedido.ObtenerMontoTotal();
+            TempData["MontoTotal"] = montoTotal.ToString();
+            return RedirectToAction("Confirmacion", new { id = pedido.Id });
+        }
+        public async Task<IActionResult> Confirmacion(int id)
+        {
+            var pedido = await _context.Pedidos
+                .Include(p => p.Items)
+                    .ThenInclude(i => i.Hamburguesa)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
             return View(pedido);
+        }
+
+        public async Task<IActionResult> Historial()
+        {
+            // 1️⃣ Obtener el usuario actual (de la sesión)
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (usuarioId == null)
+            {
+                return RedirectToAction("Login", "Usuario"); // o como sea tu login
+            }
+
+            // 2️⃣ Traer todos los pedidos de ese usuario, con sus Items y Hamburguesas si querés
+            var pedidos = await _context.Pedidos
+                .Where(p => p.UsuarioId == usuarioId)
+                .Include(p => p.Items)
+                    .ThenInclude(i => i.Hamburguesa) // si querés info de la hamburguesa
+                .OrderByDescending(p => p.Fecha)
+                .ToListAsync();
+
+            // 3️⃣ Mostrarlo en una vista
+            return View(pedidos);
         }
 
         // GET: Pedido/Edit/5

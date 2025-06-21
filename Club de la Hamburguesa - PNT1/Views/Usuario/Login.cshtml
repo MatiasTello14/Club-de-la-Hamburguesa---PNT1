@@ -1,0 +1,38 @@
+﻿@model Club_de_la_Hamburguesa___PNT1.Models.Usuario
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<h2 class="titulo">Iniciar sesión</h2>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Login" asp-controller="Usuario" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Contraseña" class="control-label"></label>
+                <input asp-for="Contraseña" class="form-control" type="password" />
+                <span asp-validation-for="Contraseña" class="text-danger"></span>
+            </div>
+            <div class="boton">
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="confir">
+    <p>¿No tenés cuenta? <a asp-action="Create" asp-controller="Usuario">Registrate acá</a></p>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

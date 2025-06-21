@@ -1,57 +1,129 @@
 ﻿@model Club_de_la_Hamburguesa___PNT1.Models.Pedido
 
-@{
-    ViewData["Title"] = "Create";
-}
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-<h1>Create</h1>
-
-<h4>Pedido</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MetodoEntrega" class="control-label"></label>
-                <select asp-for="MetodoEntrega" class="form-control"></select>
-                <span asp-validation-for="MetodoEntrega" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MetodoPago" class="control-label"></label>
-                <select asp-for="MetodoPago" class="form-control"></select>
-                <span asp-validation-for="MetodoPago" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Direccion" class="control-label"></label>
-                <input asp-for="Direccion" class="form-control" />
-                <span asp-validation-for="Direccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <select asp-for="Estado" class="form-control"></select>
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <select asp-for="UsuarioId" class ="form-control" asp-items="ViewBag.UsuarioId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <!-- Método de Entrega -->
+    <div class="form-group">
+        <label>Método de Entrega:</label>
+        <select asp-for="MetodoEntrega" id="MetodoEntrega" class="form-control"
+                asp-items="Html.GetEnumSelectList<Club_de_la_Hamburguesa___PNT1.Models.Entrega>()">
+        </select>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <!-- Dirección -->
+    <div id="direccionContainer" style="display:none;">
+        <label asp-for="Direccion"></label>
+        <input asp-for="Direccion" class="form-control" />
+    </div>
+
+    <!-- Método de Pago -->
+    <div class="form-group">
+        <label>Método de Pago:</label>
+        <select asp-for="MetodoPago" id="MetodoPago" class="form-control"
+                asp-items="Html.GetEnumSelectList<Club_de_la_Hamburguesa___PNT1.Models.Pago>()">
+        </select>
+    </div>
+
+    <!-- Formulario Tarjeta SOLO si no tiene -->
+    <div id="tarjetaForm" style="display:none;">
+        @{
+            bool tieneTarjeta = ViewBag.UsuarioTieneTarjeta ?? false;
+        }
+
+        @if (!tieneTarjeta)
+        {
+            <h5>Agregar Tarjeta</h5>
+            <div class="form-group">
+                <label>Número</label>
+                <input type="text" name="Tarjeta_Numero" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Titular</label>
+                <input type="text" name="Tarjeta_Titular" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Año de vencimiento</label>
+                <input type="number" name="Tarjeta_AnioVencimiento" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Código de seguridad</label>
+                <input type="number" name="Tarjeta_CodigoSeguridad" class="form-control" />
+            </div>
+        }
+    </div>
+    <!-- Hamburguesas -->
+    <div class="row">
+        @foreach (var h in (List<Club_de_la_Hamburguesa___PNT1.Models.Hamburguesa>)ViewBag.Hamburguesas)
+        {
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <img src="@Url.Content("~/" + h.ImagenUrl)" />
+                    <div class="card-body text-black">
+                        <h5 class="subtitulo">@h.Nombre</h5>
+                        <p class="descp">@h.Descripcion</p>
+                        <p class="descp"><strong>Precio:</strong> $@h.Precio</p>
+                        <input type="checkbox" name="HamburguesasSeleccionadas" value="@h.Id" /> Elegir
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Selección de Bebida -->
+    <div class="form-group">
+        <label>Bebida:</label>
+        <select asp-for="BebidaElegida" class="form-control"
+                asp-items="Html.GetEnumSelectList<Club_de_la_Hamburguesa___PNT1.Models.Bebida>()">
+            <option value="">Seleccione una bebida (opcional)</option>
+        </select>
+    </div>
+
+    <!-- Selección de Ingrediente Extra -->
+    <div class="form-group">
+        <label>Ingrediente Extra:</label>
+        <select asp-for="IngredienteAdicional" class="form-control"
+                asp-items="Html.GetEnumSelectList<Club_de_la_Hamburguesa___PNT1.Models.Ingrediente>()">
+            <option value="">Seleccione un ingrediente extra (opcional)</option>
+        </select>
+    </div>
+
+    <!-- Botón -->
+    <div class="boton">
+        <button type="submit" class="btn btn-primary mt-3">Confirmar Pedido</button>
+    </div>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const metodoEntrega = document.getElementById("MetodoEntrega");
+            const direccionContainer = document.getElementById("direccionContainer");
+
+            const metodoPago = document.getElementById("MetodoPago");
+            const tarjetaForm = document.getElementById("tarjetaForm");
+            const tieneTarjeta = '@ViewBag.UsuarioTieneTarjeta'.toLowerCase() === 'true';
+
+            function toggleDireccion() {
+                direccionContainer.style.display = metodoEntrega.value === "1" ? "block" : "none";
+            }
+
+            function toggleTarjetaForm() {
+                if (!tieneTarjeta && metodoPago.value === "1") {
+                    tarjetaForm.style.display = "block";
+                } else {
+                    tarjetaForm.style.display = "none";
+                }
+            }
+
+            toggleDireccion();
+            toggleTarjetaForm();
+            metodoEntrega.addEventListener("change", toggleDireccion);
+            metodoPago.addEventListener("change", toggleTarjetaForm);
+        });
+    </script>
 }
