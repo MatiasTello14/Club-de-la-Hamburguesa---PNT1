@@ -1,0 +1,18 @@
+﻿@model Club_de_la_Hamburguesa___PNT1.Models.Pedido
+
+<h2>Cambiar Estado del Pedido #@Model.Id</h2>
+
+<form asp-action="CambiarEstado" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <label>Nuevo Estado:</label>
+    <select name="nuevoEstado" class="form-control">
+        @foreach (var estado in Enum.GetValues(typeof(Club_de_la_Hamburguesa___PNT1.Models.Estado)))
+        {
+            var selected = estado.Equals(Model.Estado) ? "selected=\"selected\"" : "";
+            @Html.Raw($"<option value=\"{estado}\" {selected}>{estado}</option>")
+        }
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+</form>

@@ -21,7 +21,30 @@
                 <td>@pedido.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@pedido.MetodoEntrega</td>
                 <td>@pedido.MetodoPago</td>
-                <td>@pedido.Estado</td>
+                <td>
+                    @{
+                        string display = "";
+                        switch (pedido.Estado)
+                        {
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.EnPreparacion:
+                                display = "En preparación";
+                                break;
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.ListoParaRetirar:
+                                display = "Listo para retirar";
+                                break;
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.EnviadoADomicilio:
+                                display = "Pedido enviado a domicilio";
+                                break;
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.Recibido:
+                                display = "Recibido";
+                                break;
+                            default:
+                                display = pedido.Estado.ToString();
+                                break;
+                        }
+                    }
+                    @display
+                </td>
                 <td>$@pedido.ObtenerMontoTotal()</td>
             </tr>
         }

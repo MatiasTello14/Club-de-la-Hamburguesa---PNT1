@@ -22,6 +22,14 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // GET: Pedido
         public async Task<IActionResult> Index()
         {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid(); // No sos admin → acceso denegado
+            }
+
             var usuarioDatabaseContext = _context.Pedidos.Include(p => p.Usuario);
             return View(await usuarioDatabaseContext.ToListAsync());
         }
@@ -172,6 +180,56 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
 
             // 3️⃣ Mostrarlo en una vista
             return View(pedidos);
+        }
+
+        // GET: Pedido/CambiarEstado/5
+        public async Task<IActionResult> CambiarEstado(int id)
+        {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid(); // No sos admin
+            }
+
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
+            // Mostrar vista con opciones de estado
+            ViewBag.Estados = Enum.GetValues(typeof(Estado));
+            return View(pedido);
+        }
+
+        // POST: Pedido/CambiarEstado/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CambiarEstado(int id, Estado nuevoEstado)
+        {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid();
+            }
+
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
+            // Usás tu clase Administrador para aplicar la lógica:
+            var admin = new Administrador(usuario.Nombre);
+            admin.CambiarEstadoPedido(pedido, nuevoEstado);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Pedido/Edit/5

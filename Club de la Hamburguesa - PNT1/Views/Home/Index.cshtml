@@ -15,6 +15,9 @@
 @if (esAdmin == "true")
 {
     <p class="subtHome"><strong>Sos administrador.</strong> Podés gestionar los usuarios, pedidos y más.</p>
+    <div class="boton">
+        <a class="btn btn-warning" asp-controller="Pedido" asp-action="Index">Gestionar estados de pedidos</a>
+    </div>
 }
 else
  {
