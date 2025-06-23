@@ -11,8 +11,8 @@
         </select>
     </div>
 
-    <!-- Dirección -->
-    <div id="direccionContainer" style="display:none;">
+    <!-- Dirección en caso de que corresponda -->
+    <div id="direccionContainer">
         <label asp-for="Direccion"></label>
         <input asp-for="Direccion" class="form-control" />
     </div>
@@ -25,8 +25,8 @@
         </select>
     </div>
 
-    <!-- Formulario Tarjeta SOLO si no tiene -->
-    <div id="tarjetaForm" style="display:none;">
+    <!-- Formulario de Tarjeta, solo si al momento de registrarse no coloco ninguna tarjeta -->
+    <div id="tarjetaForm">
         @{
             bool tieneTarjeta = ViewBag.UsuarioTieneTarjeta ?? false;
         }
@@ -75,7 +75,6 @@
         <label>Bebida:</label>
         <select asp-for="BebidaElegida" class="form-control"
                 asp-items="Html.GetEnumSelectList<Club_de_la_Hamburguesa___PNT1.Models.Bebida>()">
-            <option value="">Seleccione una bebida (opcional)</option>
         </select>
     </div>
 
@@ -84,11 +83,10 @@
         <label>Ingrediente Extra:</label>
         <select asp-for="IngredienteAdicional" class="form-control"
                 asp-items="Html.GetEnumSelectList<Club_de_la_Hamburguesa___PNT1.Models.Ingrediente>()">
-            <option value="">Seleccione un ingrediente extra (opcional)</option>
         </select>
     </div>
 
-    <!-- Botón -->
+    
     <div class="boton">
         <button type="submit" class="btn btn-primary mt-3">Confirmar Pedido</button>
     </div>

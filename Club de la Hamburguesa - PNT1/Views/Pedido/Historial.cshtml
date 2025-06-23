@@ -5,7 +5,7 @@
 <table class="table table-striped historial-tables">
     <thead>
         <tr>
-            <th># Pedido</th>
+            <th>Pedido</th>
             <th>Fecha</th>
             <th>Método de Entrega</th>
             <th>Método de Pago</th>
@@ -19,31 +19,65 @@
             <tr>
                 <td>@pedido.Id</td>
                 <td>@pedido.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>@pedido.MetodoEntrega</td>
-                <td>@pedido.MetodoPago</td>
                 <td>
                     @{
-                        string display = "";
-                        switch (pedido.Estado)
+                        string entregaDisplay = "";
+                        switch (pedido.MetodoEntrega)
                         {
-                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.EnPreparacion:
-                                display = "En preparación";
+                            case Club_de_la_Hamburguesa___PNT1.Models.Entrega.EnvioDomicilio:
+                                entregaDisplay = "Envío a domicilio";
                                 break;
-                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.ListoParaRetirar:
-                                display = "Listo para retirar";
-                                break;
-                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.EnviadoADomicilio:
-                                display = "Pedido enviado a domicilio";
-                                break;
-                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.Recibido:
-                                display = "Recibido";
+                            case Club_de_la_Hamburguesa___PNT1.Models.Entrega.RetiroLocal:
+                                entregaDisplay = "Retiro en el local";
                                 break;
                             default:
-                                display = pedido.Estado.ToString();
+                                entregaDisplay = pedido.MetodoEntrega.ToString();
                                 break;
                         }
                     }
-                    @display
+                    @entregaDisplay
+                </td>
+                <td>
+                    @{
+                        string pagoDisplay = "";
+                        switch (pedido.MetodoPago)
+                        {
+                            case Club_de_la_Hamburguesa___PNT1.Models.Pago.Tarjeta:
+                                pagoDisplay = "Tarjeta";
+                                break;
+                            case Club_de_la_Hamburguesa___PNT1.Models.Pago.Efectivo:
+                                pagoDisplay = "Efectivo";
+                                break;
+                            default:
+                                pagoDisplay = pedido.MetodoPago.ToString();
+                                break;
+                        }
+                    }
+                    @pagoDisplay
+                </td>
+                <td>
+                    @{
+                        string estadoDisplay = "";
+                        switch (pedido.Estado)
+                        {
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.EnPreparacion:
+                                estadoDisplay = "En preparación";
+                                break;
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.ListoParaRetirar:
+                                estadoDisplay = "Listo para retirar";
+                                break;
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.EnviadoADomicilio:
+                                estadoDisplay = "Pedido enviado a domicilio";
+                                break;
+                            case Club_de_la_Hamburguesa___PNT1.Models.Estado.Recibido:
+                                estadoDisplay = "Recibido";
+                                break;
+                            default:
+                                estadoDisplay = pedido.Estado.ToString();
+                                break;
+                        }
+                    }
+                    @estadoDisplay
                 </td>
                 <td>$@pedido.ObtenerMontoTotal()</td>
             </tr>

@@ -229,11 +229,11 @@ a {
     }
 
 #direccionContainer {
-    style ="display:none";
+    display:none;
 }
 
 #tarjetaForm {
-    style ="display:none";
+    display:none;
 }
 
 /*/html {

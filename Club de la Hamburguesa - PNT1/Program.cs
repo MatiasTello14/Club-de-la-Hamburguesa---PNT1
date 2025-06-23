@@ -18,9 +18,7 @@ namespace Club_de_la_Hamburguesa___PNT1
 
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo que la sesión se mantiene activa
-                options.Cookie.HttpOnly = true;                 // Solo accesible desde el servidor
-                options.Cookie.IsEssential = true;              // Necesaria para el funcionamiento
+                options.IdleTimeout = TimeSpan.FromMinutes(60); 
             });
 
             var app = builder.Build();

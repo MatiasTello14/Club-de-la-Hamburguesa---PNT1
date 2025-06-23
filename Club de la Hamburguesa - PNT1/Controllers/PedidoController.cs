@@ -130,17 +130,27 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
 
             foreach (var id in HamburguesasSeleccionadas)
             {
-                var hamburguesa = _context.Hamburguesas.Find(id); // TRAE la hamburguesa
+                // Trae la hamburguesa
+                var hamburguesa = _context.Hamburguesas.Find(id);
+
+                if (hamburguesa != null)
+                {
+                    // Descontar stock llamando tu método:
+                    hamburguesa.DescontarStock(1);
+                }
+
+                // Agregar al pedido
                 pedido.Items.Add(new Item
                 {
                     HamburguesaId = id,
-                    Hamburguesa = hamburguesa, // ASIGNÁS la instancia real
+                    Hamburguesa = hamburguesa,
                     Cantidad = 1
                 });
             }
 
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
+
             double montoTotal = pedido.ObtenerMontoTotal();
             TempData["MontoTotal"] = montoTotal.ToString();
             return RedirectToAction("Confirmacion", new { id = pedido.Id });

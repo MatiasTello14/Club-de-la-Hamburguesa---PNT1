@@ -26,7 +26,17 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             ImagenUrl = imagenUrl; 
         }
 
-
+        public void DescontarStock(int cantidad)
+        {
+            if (Stock >= cantidad)
+            {
+                Stock -= cantidad;
+            }
+            else
+            {
+                throw new InvalidOperationException($"No hay suficiente stock para {Nombre}.");
+            }
+        }
 
     }
 
