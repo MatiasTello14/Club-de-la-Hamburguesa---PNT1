@@ -1,5 +1,9 @@
 ﻿@model Club_de_la_Hamburguesa___PNT1.Models.Pedido
 
+@{
+    var montoTotal = TempData["MontoTotal"];
+}
+
 <h1 class="confir">¡Pedido realizado con éxito!</h1>
 
 <p class="confir"><strong>Fecha:</strong> @Model.Fecha</p>
@@ -16,6 +20,7 @@
 
 <p class="confir"><strong>Bebida:</strong> @Model.BebidaElegida (@((int)Model.BebidaElegida) $)</p>
 <p class="confir"><strong>Ingrediente extra:</strong> @Model.IngredienteAdicional (@((int)Model.IngredienteAdicional) $)</p>
+
 
 <p class="confir"><strong>Total:</strong> $@Model.ObtenerMontoTotal()</p>
 

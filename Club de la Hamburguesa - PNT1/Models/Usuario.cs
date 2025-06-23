@@ -17,7 +17,6 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
         public Tarjeta? Tarjeta { get; set; }
 
         [Display(Name = "Descuento de bienvenida aplicado")]
-        public bool DescuentoBienvenidaAplicado { get; set; }
         public ICollection<Pedido> Pedidos { get; set; }
         public bool EsAdmin { get; set; }
 
@@ -31,7 +30,6 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             setNombre(nombre);
             setEmail(email);
             setContraseña(contraseña);
-            DescuentoBienvenidaAplicado = false;
             Pedidos = new List<Pedido>();
             EsAdmin = false;
         }

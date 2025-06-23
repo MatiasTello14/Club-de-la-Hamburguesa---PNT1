@@ -147,12 +147,11 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
                     Cantidad = 1
                 });
             }
+            double montoTotal = pedido.ObtenerMontoTotal(); 
 
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
-
-            double montoTotal = pedido.ObtenerMontoTotal();
-            TempData["MontoTotal"] = montoTotal.ToString();
+       
             return RedirectToAction("Confirmacion", new { id = pedido.Id });
         }
         public async Task<IActionResult> Confirmacion(int id)
@@ -170,25 +169,17 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
             return View(pedido);
         }
 
-        public async Task<IActionResult> Historial()
+        public IActionResult Historial()
         {
-            // 1️⃣ Obtener el usuario actual (de la sesión)
             var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
 
-            if (usuarioId == null)
-            {
-                return RedirectToAction("Login", "Usuario"); // o como sea tu login
-            }
-
-            // 2️⃣ Traer todos los pedidos de ese usuario, con sus Items y Hamburguesas si querés
-            var pedidos = await _context.Pedidos
-                .Where(p => p.UsuarioId == usuarioId)
+            var pedidos = _context.Pedidos
                 .Include(p => p.Items)
-                    .ThenInclude(i => i.Hamburguesa) // si querés info de la hamburguesa
-                .OrderByDescending(p => p.Fecha)
-                .ToListAsync();
+                    .ThenInclude(i => i.Hamburguesa)
+                .Include(p => p.Usuario) 
+                .Where(p => p.UsuarioId == usuarioId)
+                .ToList();
 
-            // 3️⃣ Mostrarlo en una vista
             return View(pedidos);
         }
 

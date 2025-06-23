@@ -51,9 +51,17 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
 
         public double ObtenerMontoTotal()
         {
-            double totalHamburguesas = Items.Sum(i => i.Hamburguesa?.Precio ?? 0);
-            double totalExtras = (int)BebidaElegida + (int)IngredienteAdicional;
-            return totalHamburguesas + totalExtras;
+            double total = 0;
+
+            foreach (var item in Items)
+            {
+                total += item.Hamburguesa.Precio * item.Cantidad;
+            }
+
+            total += (int)BebidaElegida;
+            total += (int)IngredienteAdicional;
+
+            return total;
         }
     }
 
