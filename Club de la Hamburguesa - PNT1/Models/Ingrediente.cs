@@ -1,12 +1,10 @@
 ﻿namespace Club_de_la_Hamburguesa___PNT1.Models
 {
-    public enum Ingrediente
+    public enum Acompañmiento
     {
-        Lechuga = 200, 
-        Tomate = 200 ,
-        Queso = 300, 
-        Huevo = 400, 
-        Bacon = 400,
+        PapasConCheddar = 4000, 
+        ArosDeCebolla = 3000 ,
+        PalitosDeMuzzarella = 3500, 
         Ninguno = 0
     }
 }
