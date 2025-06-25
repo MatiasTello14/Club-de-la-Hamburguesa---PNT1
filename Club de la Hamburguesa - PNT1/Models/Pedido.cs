@@ -24,8 +24,8 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
         [EnumDataType(typeof(Bebida))]
         public Bebida BebidaElegida { get; set; }
 
-        [EnumDataType(typeof(Ingrediente))]
-        public Ingrediente IngredienteAdicional { get; set; }
+        [EnumDataType(typeof(Acompañamiento))]
+        public Acompañamiento AcompañamientoAdicional { get; set; }
         public DateTime Fecha { get; set; }
         public ICollection<Item> Items { get; set; }
 
@@ -37,7 +37,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             Items = new List<Item>();
         }
 
-        public Pedido(Entrega metodoEntrega, Pago metodoPago, string direccion, int usuarioId, Bebida bebida, Ingrediente ingrediente)
+        public Pedido(Entrega metodoEntrega, Pago metodoPago, string direccion, int usuarioId, Bebida bebida, Acompañamiento acompáñamiento)
         {
             MetodoEntrega = metodoEntrega;
             MetodoPago = metodoPago;
@@ -45,7 +45,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             UsuarioId = usuarioId;
             Estado = Estado.EnPreparacion;
             BebidaElegida = bebida;
-            IngredienteAdicional = ingrediente;
+            AcompañamientoAdicional = acompáñamiento;
             Items = new List<Item>();
         }
 
@@ -59,7 +59,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             }
 
             total += (int)BebidaElegida;
-            total += (int)IngredienteAdicional;
+            total += (int)AcompañamientoAdicional;
 
             return total;
         }

@@ -1,6 +1,6 @@
 ﻿namespace Club_de_la_Hamburguesa___PNT1.Models
 {
-    public enum Acompañmiento
+    public enum Acompañamiento
     {
         PapasConCheddar = 4000, 
         ArosDeCebolla = 3000 ,

@@ -62,7 +62,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
             ViewBag.Hamburguesas = _context.Hamburguesas.ToList();
             ViewBag.UsuarioTieneTarjeta = usuario?.Tarjeta != null;
             ViewBag.Bebidas = Enum.GetValues(typeof(Bebida));
-            ViewBag.Ingredientes = Enum.GetValues(typeof(Ingrediente));
+            ViewBag.Ingredientes = Enum.GetValues(typeof(Acompañamiento));
 
             return View(new Pedido());  // Usás Pedido directamente
         }
@@ -98,7 +98,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
                 ViewBag.Hamburguesas = _context.Hamburguesas.ToList();
                 ViewBag.UsuarioTieneTarjeta = usuarioTieneTarjeta;
                 ViewBag.Bebidas = Enum.GetValues(typeof(Bebida));
-                ViewBag.Ingredientes = Enum.GetValues(typeof(Ingrediente));
+                ViewBag.Ingredientes = Enum.GetValues(typeof(Acompañamiento));
                 return View(pedido);
             }
 
