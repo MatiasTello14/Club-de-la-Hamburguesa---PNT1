@@ -121,7 +121,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Email,Contraseña,DescuentoBienvenidaAplicado")]
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Email,Contraseña")]
                 Usuario usuario,
                 string? Tarjeta_Numero,
                 string? Tarjeta_Titular,
@@ -152,7 +152,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
             {
                 try
                 {
-                    //  Validar usando tus setters para Nombre, Email y Contraseña
+                    //  Validando usando los setters de las clases
                     usuario.setNombre(usuario.Nombre);
                     usuario.setEmail(usuario.Email);
                     usuario.setContraseña(usuario.Contraseña);
@@ -184,14 +184,14 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
                         usuario.Tarjeta = tarjeta;
                     }
 
-                    // Guardar en base
+                    // Guardar en bbdd
                     _context.Add(usuario);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Login", "Usuario");
                 }
                 catch (Exception ex)
                 {
-                    // Capturar cualquier error de validación de tus métodos y mostrarlo
+                    // Capturar cualquier error y lo muestra
                     ModelState.AddModelError("", ex.Message);
                     return View(usuario);
                 }
@@ -225,7 +225,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Email,Contraseña,DescuentoBienvenidaAplicado")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Email,Contraseña")] Usuario usuario)
         {
             if (HttpContext.Session.GetString("EsAdmin") != "true")
             {
