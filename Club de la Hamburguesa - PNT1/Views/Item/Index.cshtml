@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Club_de_la_Hamburguesa___PNT1.Models.Usuario>
+﻿@model IEnumerable<Club_de_la_Hamburguesa___PNT1.Models.Item>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1 class="titulo">Usuarios</h1>
+<h1 class="titulo">Detalles de los pedidos</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,29 +12,22 @@
 <table class="historial-tables">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contraseña)
-            </th>
-            <th></th>
+            <th>ID de Pedido</th>
+            <th>ID de Hamburguesa</th>
+            <th>Cantidad</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
+                 @Html.DisplayFor(modelItem => item.Pedido.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => item.Hamburguesa.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Contraseña)
+                    @Html.DisplayFor(modelItem => item.Cantidad)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

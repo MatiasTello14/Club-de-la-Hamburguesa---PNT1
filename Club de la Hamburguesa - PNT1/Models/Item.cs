@@ -24,10 +24,5 @@ namespace Club_de_la_Hamburguesa___PNT1.Models
             HamburguesaId = hamburguesaId;
 
         }
-
-        public double CalcularPrecioTotalItem(Item item)
-        {
-            return 0;
-        }
     }
 }

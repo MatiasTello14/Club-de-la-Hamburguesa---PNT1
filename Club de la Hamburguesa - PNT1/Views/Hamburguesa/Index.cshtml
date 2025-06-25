@@ -1,34 +1,43 @@
 ﻿@model IEnumerable<Club_de_la_Hamburguesa___PNT1.Models.Hamburguesa>
 
 @{
-    ViewData["Title"] = "Hamburguesas Disponibles";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Hamburguesas Disponibles</h1>
+<h1 class="titulo">Administrar Hamburguesas</h1>
 
-<div class="row">
-    @foreach (var burger in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="~/@burger.ImagenUrl" class="card-img-top" alt="@burger.Nombre" style="height: 200px; object-fit: cover;" />
-                <div class="card-body">
-                    <h5 class="card-title">@burger.Nombre</h5>
-                    <p class="card-text">@burger.Descripcion</p>
-                    <p><strong>Precio:</strong> $@burger.Precio</p>
-                </div>
-                <div class="card-footer">
-                    <form asp-controller="Carrito" asp-action="Agregar" method="post">
-                        <input type="hidden" name="hamburguesaId" value="@burger.Id" />
-                        <button type="submit" class="btn btn-success">Agregar al carrito</button>
-                    </form>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nueva Hamburguesa</a>
+</p>
 
-                    <form asp-controller="Carrito" asp-action="Quitar" method="post" class="mt-2">
-                        <input type="hidden" name="hamburguesaId" value="@burger.Id" />
-                        <button type="submit" class="btn btn-danger">Quitar del carrito</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    }
-</div>
+<table class="historial-tables">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+            <th>@Html.DisplayNameFor(model => model.Precio)</th>
+            <th>@Html.DisplayNameFor(model => model.Stock)</th>
+            <th>@Html.DisplayNameFor(model => model.ImagenUrl)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                <td>$@Html.DisplayFor(modelItem => item.Precio)</td>
+                <td>@Html.DisplayFor(modelItem => item.Stock)</td>
+                <td>
+                    <img src="~/@item.ImagenUrl" alt="Imagen" style="height: 50px;" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Ver</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

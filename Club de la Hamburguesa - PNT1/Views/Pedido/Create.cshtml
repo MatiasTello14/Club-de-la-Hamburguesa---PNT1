@@ -58,12 +58,21 @@
         {
             <div class="col-md-4">
                 <div class="card mb-3">
-                    <img src="@Url.Content("~/" + h.ImagenUrl)" />
+                    <img src="@Url.Content("~/" + h.ImagenUrl)" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
                     <div class="card-body text-black">
                         <h5 class="subtitulo">@h.Nombre</h5>
                         <p class="descp">@h.Descripcion</p>
                         <p class="descp"><strong>Precio:</strong> $@h.Precio</p>
-                        <input type="checkbox" name="HamburguesasSeleccionadas" value="@h.Id" /> Elegir
+
+                        <!-- Radio para elegir hamburguesa -->
+                        <input type="checkbox" name="HamburguesasSeleccionadas" value="@h.Id" id="burger_@h.Id" />
+                        <label for="burger_@h.Id">Seleccionar</label>
+
+                        <!-- Cantidad, se muestra solo si el checkbox está tildado -->
+                        <div class="mt-2 cantidad-container" id="cantidad-@h.Id" style="display:none;">
+                            <label for="Cantidad_@h.Id">Cantidad:</label>
+                            <input type="number" name="Cantidad_@h.Id" class="form-control" id="Cantidad_@h.Id" min="1" max="@h.Stock" value="1" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,6 +131,16 @@
             toggleTarjetaForm();
             metodoEntrega.addEventListener("change", toggleDireccion);
             metodoPago.addEventListener("change", toggleTarjetaForm);
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('input[name="HamburguesasSeleccionadas"]').forEach(checkbox => {
+                checkbox.addEventListener("change", function () {
+                    const cantidadDiv = document.getElementById("cantidad-" + checkbox.value);
+                    cantidadDiv.style.display = checkbox.checked ? "block" : "none";
+                });
+            });
         });
     </script>
 }

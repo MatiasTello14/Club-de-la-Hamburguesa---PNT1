@@ -22,12 +22,29 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // GET: Hamburguesa
         public async Task<IActionResult> Index()
         {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            // Si no está logueado o no es admin -> Prohibir acceso
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid();
+            }
+
             return View(await _context.Hamburguesas.ToListAsync());
         }
 
         // GET: Hamburguesa/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid();
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -46,6 +63,14 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // GET: Hamburguesa/Create
         public IActionResult Create()
         {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid();
+            }
+
             return View();
         }
 
@@ -68,6 +93,14 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // GET: Hamburguesa/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid();
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -86,7 +119,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Precio,Stock")] Hamburguesa hamburguesa)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Precio,Stock,ImagenUrl")] Hamburguesa hamburguesa)
         {
             if (id != hamburguesa.Id)
             {
@@ -97,21 +130,24 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
             {
                 try
                 {
-                    _context.Update(hamburguesa);
+                    var original = await _context.Hamburguesas.FindAsync(id);
+                    if (original == null) return NotFound();
+
+                    original.Nombre = hamburguesa.Nombre;
+                    original.Descripcion = hamburguesa.Descripcion;
+                    original.Precio = hamburguesa.Precio;
+                    original.Stock = hamburguesa.Stock;
+                    original.ImagenUrl = hamburguesa.ImagenUrl;
+
                     await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HamburguesaExists(hamburguesa.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!HamburguesaExists(hamburguesa.Id)) return NotFound();
+                    else throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(hamburguesa);
         }
@@ -119,6 +155,14 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         // GET: Hamburguesa/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+
+            if (usuario == null || !usuario.EsAdmin)
+            {
+                return Forbid();
+            }
+
             if (id == null)
             {
                 return NotFound();

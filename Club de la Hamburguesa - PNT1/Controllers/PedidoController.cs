@@ -74,45 +74,25 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
         {
             var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
             var usuario = _context.Usuarios.Include(u => u.Tarjeta).FirstOrDefault(u => u.Id == usuarioId);
+
             bool usuarioTieneTarjeta = usuario?.Tarjeta != null;
 
-            // Validar domicilio
             if (pedido.MetodoEntrega == Entrega.EnvioDomicilio && string.IsNullOrWhiteSpace(pedido.Direccion))
-            {
                 ModelState.AddModelError("Direccion", "Debe ingresar una dirección si elige Envío a domicilio.");
-            }
 
-            // Validar hamburguesas
             if (HamburguesasSeleccionadas == null || !HamburguesasSeleccionadas.Any())
-            {
-                ModelState.AddModelError("", "Debe elegir al menos una hamburguesa.");
-            }
+                ModelState.AddModelError("", "Debe seleccionar al menos una hamburguesa.");
 
-            // Validar tarjeta si eligió pagar con tarjeta pero no tiene
             if (pedido.MetodoPago == Pago.Tarjeta && !usuarioTieneTarjeta)
             {
-                // Podés recibir campos con [FromForm] si querés
-                string numero = Request.Form["Tarjeta_Numero"];
-                string titular = Request.Form["Tarjeta_Titular"];
-                int? anio = int.TryParse(Request.Form["Tarjeta_AnioVencimiento"], out int a) ? a : (int?)null;
-                int? codigo = int.TryParse(Request.Form["Tarjeta_CodigoSeguridad"], out int c) ? c : (int?)null;
-
-                if (string.IsNullOrWhiteSpace(numero) || string.IsNullOrWhiteSpace(titular) || !anio.HasValue || !codigo.HasValue)
-                {
-                    ModelState.AddModelError("Tarjeta", "Completá todos los campos de la tarjeta.");
-                }
-                else
-                {
-                    var tarjeta = new Tarjeta();
-                    tarjeta.setNumero(numero);
-                    tarjeta.setTitular(titular);
-                    tarjeta.setAnioVencimiento(anio.Value);
-                    tarjeta.setCodigoSeguridad(codigo.Value);
-                    usuario.Tarjeta = tarjeta;
-                }
+                var tarjeta = new Tarjeta();
+                tarjeta.setNumero(Request.Form["Tarjeta_Numero"]);
+                tarjeta.setTitular(Request.Form["Tarjeta_Titular"]);
+                tarjeta.setAnioVencimiento(int.Parse(Request.Form["Tarjeta_AnioVencimiento"]));
+                tarjeta.setCodigoSeguridad(int.Parse(Request.Form["Tarjeta_CodigoSeguridad"]));
+                usuario.Tarjeta = tarjeta;
             }
 
-            // Validaciones fallidas → recargar combos
             if (!ModelState.IsValid)
             {
                 ViewBag.Hamburguesas = _context.Hamburguesas.ToList();
@@ -122,36 +102,38 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
                 return View(pedido);
             }
 
-            // Armar pedido final
             pedido.UsuarioId = usuarioId.Value;
             pedido.Estado = Estado.EnPreparacion;
             pedido.Fecha = DateTime.Now;
             pedido.Items = new List<Item>();
 
-            foreach (var id in HamburguesasSeleccionadas)
+            foreach (int id in HamburguesasSeleccionadas)
             {
-                // Trae la hamburguesa
                 var hamburguesa = _context.Hamburguesas.Find(id);
-
                 if (hamburguesa != null)
                 {
-                    // Descontar stock llamando tu método:
-                    hamburguesa.DescontarStock(1);
-                }
+                    int cantidad = int.Parse(Request.Form["Cantidad_" + id]);
+                    if (hamburguesa.Stock < cantidad)
+                    {
+                        ModelState.AddModelError("", "No hay suficiente stock para " + hamburguesa.Nombre);
+                        ViewBag.Hamburguesas = _context.Hamburguesas.ToList();
+                        return View(pedido);
+                    }
 
-                // Agregar al pedido
-                pedido.Items.Add(new Item
-                {
-                    HamburguesaId = id,
-                    Hamburguesa = hamburguesa,
-                    Cantidad = 1
-                });
+                    hamburguesa.DescontarStock(cantidad);
+
+                    pedido.Items.Add(new Item
+                    {
+                        HamburguesaId = id,
+                        Hamburguesa = hamburguesa,
+                        Cantidad = cantidad
+                    });
+                }
             }
-            double montoTotal = pedido.ObtenerMontoTotal(); 
 
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
-       
+
             return RedirectToAction("Confirmacion", new { id = pedido.Id });
         }
         public async Task<IActionResult> Confirmacion(int id)

@@ -6,7 +6,7 @@
 }
 
 @{
-    ViewData["Title"] = "Bienvenido";
+    ViewData["Title"] = "Index";
     var nombre = Context.Session.GetString("NombreUsuario");
     var esAdmin = Context.Session.GetString("EsAdmin");
 }
@@ -16,7 +16,11 @@
 {
     <p class="subtHome"><strong>Sos administrador.</strong> Podés gestionar los usuarios, pedidos y más.</p>
     <div class="boton">
-        <a class="btn btn-warning" asp-controller="Pedido" asp-action="Index">Gestionar estados de pedidos</a>
+        <a class="btn btn-primary" asp-controller="Pedido" asp-action="Index">Gestionar estados de pedidos</a>
+        <a class="btn btn-primary" asp-controller="Hamburguesa" asp-action="Index">Gestionar Hamburguesas</a>
+        <a class="btn btn-primary" asp-controller="Usuario" asp-action="Index">Gestionar Usuarios</a>
+        <a class="btn btn-primary" asp-controller="Item" asp-action="Index">Detalles de cada pedido</a>
+        <a class="btn btn-primary" asp-controller="Tarjeta" asp-action="Index">Tarjetas registradas</a>
     </div>
 }
 else

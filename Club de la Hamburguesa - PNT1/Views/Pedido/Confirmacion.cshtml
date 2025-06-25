@@ -1,9 +1,5 @@
 ﻿@model Club_de_la_Hamburguesa___PNT1.Models.Pedido
 
-@{
-    var montoTotal = TempData["MontoTotal"];
-}
-
 <h1 class="confir">¡Pedido realizado con éxito!</h1>
 
 <p class="confir"><strong>Fecha:</strong> @Model.Fecha</p>
@@ -13,7 +9,7 @@
     @foreach (var item in Model.Items)
     {
         <li class="confir">
-            @item.Hamburguesa.Nombre — $@item.Hamburguesa.Precio x @item.Cantidad
+            @item.Hamburguesa.Nombre — $@item.Hamburguesa.Precio x @item.Cantidad = <strong>$@(item.Hamburguesa.Precio * item.Cantidad)</strong>
         </li>
     }
 </ul>
@@ -21,8 +17,8 @@
 <p class="confir"><strong>Bebida:</strong> @Model.BebidaElegida (@((int)Model.BebidaElegida) $)</p>
 <p class="confir"><strong>Ingrediente extra:</strong> @Model.IngredienteAdicional (@((int)Model.IngredienteAdicional) $)</p>
 
-
-<p class="confir"><strong>Total:</strong> $@Model.ObtenerMontoTotal()</p>
+<hr />
+<p class="confir"><strong>Total a pagar:</strong> <span style="font-size: 18px;">$@Model.ObtenerMontoTotal()</span></p>
 
 <div class="boton">
     <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Volver al inicio</a>
