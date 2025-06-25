@@ -64,7 +64,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
             ViewBag.Bebidas = Enum.GetValues(typeof(Bebida));
             ViewBag.Ingredientes = Enum.GetValues(typeof(Acompañamiento));
 
-            return View(new Pedido());  // Usás Pedido directamente
+            return View(new Pedido());  
         }
 
         // POST: Pedido/Create

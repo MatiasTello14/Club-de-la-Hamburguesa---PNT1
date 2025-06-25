@@ -128,7 +128,7 @@ namespace Club_de_la_Hamburguesa___PNT1.Controllers
                 int? Tarjeta_AnioVencimiento,
                 int? Tarjeta_CodigoSeguridad)
         {
-            // Validar email único con while
+            
             var usuarios = _context.Usuarios.ToList();
             int i = 0;
             bool emailExiste = false;
