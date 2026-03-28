@@ -31,3 +31,5 @@ Un sistema integral de gestión de pedidos para locales gastronómicos, desarrol
 * **Data:** Contexto de base de datos y migraciones de Entity Framework.
 
 ---
+
+Proyecto realizado para la materia Programacion en Nuevas Tecnologias 1.
